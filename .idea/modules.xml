@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/kafka-market-value.iml" filepath="$PROJECT_DIR$/kafka-market-value.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kafka-orders.iml" filepath="$PROJECT_DIR$/kafka-orders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kafka-prices.iml" filepath="$PROJECT_DIR$/kafka-prices.iml" />
+    </modules>
+  </component>
+</project>
