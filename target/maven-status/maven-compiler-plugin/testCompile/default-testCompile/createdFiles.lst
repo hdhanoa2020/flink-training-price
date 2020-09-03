@@ -1,7 +1,0 @@
-org\apache\flink\training\assignments\orders\TestBase.class
-org\apache\flink\training\assignments\sinks\TestSink.class
-org\apache\flink\training\assignments\domain\TBillTestRecord.class
-org\apache\flink\training\assignments\domain\OrderTestResults.class
-org\apache\flink\training\assignments\orders\Testable.class
-org\apache\flink\training\assignments\sources\TestStringSource.class
-org\apache\flink\training\assignments\sources\TestSource.class

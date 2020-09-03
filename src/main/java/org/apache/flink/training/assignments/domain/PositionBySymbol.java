@@ -1,19 +1,53 @@
 package org.apache.flink.training.assignments.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class PositionBySymbol extends IncomingEvent  {
+public class PositionBySymbol extends IncomingEvent {
     private static final long serialVersionUID = -889985658676665651L;
     private String cusip;
     private int quantity;
     private String orderId;
     private BigDecimal price;
     private BigDecimal marketValue;
+    private BuySell buySell;
+    private String account;
+    private String subAccount;
+    private String positionKey;
 
+    public String getPositionKey() {
+        return positionKey;
+    }
 
-    public PositionBySymbol(String cusip, int quantity,String orderId) {
+    public void setPositionKey(String positionKey) {
+        this.positionKey = positionKey;
+    }
+
+    public BuySell getBuySell() {
+        return buySell;
+    }
+
+    public void setBuySell(BuySell buySell) {
+        this.buySell = buySell;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getSubAccount() {
+        return subAccount;
+    }
+
+    public void setSubAccount(String subAccount) {
+        this.subAccount = subAccount;
+    }
+
+    public PositionBySymbol(String cusip, int quantity, String orderId) {
         this.quantity = quantity;
         this.cusip = cusip;
         this.price = price;
@@ -32,6 +66,7 @@ public class PositionBySymbol extends IncomingEvent  {
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", marketValue=" + marketValue +
+                ", positionKey=" + positionKey +
                 ", orderId=" + orderId +
                 '}';
     }
@@ -84,7 +119,7 @@ public class PositionBySymbol extends IncomingEvent  {
     public void setMarketValue(BigDecimal marketValue) {
         this.marketValue = marketValue;
     }
-   
+
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }

@@ -14,6 +14,15 @@ public class Position extends IncomingEvent {
     private String orderId;
     private BigDecimal price;
     private BigDecimal marketValue;
+    private String positionKey;
+
+    public String getPositionKey() {
+        return positionKey;
+    }
+
+    public void setPositionKey(String positionKey) {
+        this.positionKey = positionKey;
+    }
 
     public Position(String cusip, BuySell buySell, String account, String subAccount, int quantity,String orderId) {
         this.account = account;
@@ -33,11 +42,12 @@ public class Position extends IncomingEvent {
     public String toString() {
         return "Position{" +
                 "cusip='" + cusip + '\'' +
-                ", account='" + account + '\'' +
-                ", subAccount='" + subAccount + '\'' +
+               // ", account='" + account + '\'' +
+              //  ", subAccount='" + subAccount + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", marketValue=" + marketValue +
+                ", positionKey=" + positionKey +
                 ", orderId=" + orderId +
                 '}';
     }

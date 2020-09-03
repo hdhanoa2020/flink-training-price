@@ -1,22 +1,22 @@
-2020-08-15 18:52:23,307 INFO o.s.b.StartupInfoLogger [main] Starting PerfIT v1.0-SNAPSHOT on EC2AMAZ-GKSJDD7 with PID 932 (C:\workspace\flink-training-price\flink-training-price\data\order-price-generator.jar started by Administrator in C:\workspace\flink-training-price\flink-training-price\data)
-2020-08-15 18:52:23,354 INFO o.s.b.SpringApplication [main] No active profile set, falling back to default profiles: default
-2020-08-15 18:52:25,479 INFO c.r.w.c.c.ComplianceTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
-2020-08-15 18:52:25,650 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,682 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,713 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,729 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,760 INFO c.r.w.e.c.ExpandedTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
-2020-08-15 18:52:25,791 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,807 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,823 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,838 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,854 INFO c.r.w.c.AggregationTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
-2020-08-15 18:52:25,869 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,885 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,900 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:25,916 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
-2020-08-15 18:52:26,510 INFO o.s.b.StartupInfoLogger [main] Started PerfIT in 4.159 seconds (JVM running for 6.793)
-2020-08-15 18:52:26,744 INFO c.r.w.c.ComplianceHelper [main] Rules generation and saving took 187ms
-2020-08-15 18:52:26,760 INFO c.r.w.c.ComplianceSender [pool-3-thread-1] Skipping sending orders
-2020-08-15 18:52:29,807 INFO c.r.w.c.PriceSender [pool-3-thread-2] 30 prices sent in 3.047 seconds, raw throughput=9.845749917952084
-2020-08-15 18:52:29,807 INFO c.r.w.p.PerfIT [main] All done
+2020-09-02 16:54:31,779 INFO o.s.b.StartupInfoLogger [main] Starting PerfIT v1.0-SNAPSHOT on EC2AMAZ-GKSJDD7 with PID 13804 (C:\workspace\flink-training-price\flink-training-price\data\order-price-generator.jar started by Administrator in C:\workspace\flink-training-price\flink-training-price\data)
+2020-09-02 16:54:31,821 INFO o.s.b.SpringApplication [main] No active profile set, falling back to default profiles: default
+2020-09-02 16:54:34,083 INFO c.r.w.c.c.ComplianceTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
+2020-09-02 16:54:34,268 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,300 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,328 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,351 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,379 INFO c.r.w.e.c.ExpandedTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
+2020-09-02 16:54:34,401 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,421 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,437 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,452 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,475 INFO c.r.w.c.AggregationTestConfig [main] Kafka stream properties: {bootstrap.servers=[kafka.dest.harpreet1.wsn.riskfocus.com:9092], num.stream.threads=4, application.id=wam-test-framework}
+2020-09-02 16:54:34,501 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,514 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,529 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:34,541 WARN o.a.k.c.c.AbstractConfig [main] The configuration 'admin.retries' was supplied but isn't a known config.
+2020-09-02 16:54:35,385 INFO o.s.b.StartupInfoLogger [main] Started PerfIT in 4.507 seconds (JVM running for 8.139)
+2020-09-02 16:54:36,442 INFO c.r.w.c.ComplianceHelper [main] Rules generation and saving took 1047ms
+2020-09-02 16:54:36,451 INFO c.r.w.c.ComplianceSender [pool-3-thread-1] Skipping sending orders
+2020-09-02 16:54:37,500 INFO c.r.w.c.PriceSender [pool-3-thread-2] 51 prices sent in 1.054 seconds, raw throughput=48.387096774193544
+2020-09-02 16:54:37,501 INFO c.r.w.p.PerfIT [main] All done

@@ -1,5 +1,7 @@
 package org.apache.flink.training.assignments.orders;
 
+import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -38,87 +40,85 @@ public class KafkaMarketValueAssignment extends ExerciseBase {
     public static void main(String[] args) throws Exception {
 
         var env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        env.disableOperatorChaining(); //it will improve grafana metrix view
-
-        //set watermarker interval
-       // env.getConfig().setAutoWatermarkInterval(3000L); //3 sec
-
-        // env.setParallelism(4); //its better to setup during deployment
+        env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
+        env.disableOperatorChaining();
 
         // Create tbe Kafka Consumer for price topic
         FlinkKafkaConsumer010<Price> flinkKafkaConsumer = createKafkaConsumer(PRICE_TOPIC,KAFKA_ADDRESS,KAFKA_GROUP);
         DataStream<Price> priceStream = env.addSource(flinkKafkaConsumer).name("KafkaPriceTopic").uid("KafkaPriceTopic")
                                         .keyBy(price -> price.getCusip());
 
-
         // Create the Kafka Consumer for positions by account
         FlinkKafkaConsumer010<Position> consumerPositionByAct = createConsumerPositionByAct(POSITIONS_BY_ACT_TOPIC,KAFKA_ADDRESS,KAFKA_GROUP);
-
         DataStream<Position> positionsByAcctStream = env
                 .addSource(consumerPositionByAct)
                 .name("KafkaPostionsByActReader").uid("KafkaPostionsByActReader")
                 .keyBy(postion -> postion.getCusip());
 
-        // Create tbe Kafka Consumer for positions by symbol
-         FlinkKafkaConsumer010<PositionBySymbol> consumerPositionBySymbol = createConsumerPositionBySymbol(POSITIONS_BY_SYMBOL_TOPIC,KAFKA_ADDRESS,KAFKA_GROUP);
-
-         DataStream<PositionBySymbol> positionsBySymbolStream = env
-                 .addSource(consumerPositionBySymbol).name("KafkaPostionsBySymReader")
-                 .uid("KafkaPostionsBySymReader")
-                 .keyBy(position -> position.getCusip());
-
-
-        // Log results
-       // priceStream.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "priceStreamStreamResult: {}"));
-       // positionsByAcctStream.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "positionsByAcctStreamStreamResult: {}"));
-       //positionsBySymbolStream.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "positionsBySymbolStream: {}"));
-
 
         //join the positionByAct and Price
-        DataStream<Position> mkvByAccount = priceStream
-                    .connect(positionsByAcctStream)
+        DataStream<Position> mkvByAccount = positionsByAcctStream
+                    .connect(priceStream)
                     .flatMap(new AccountLeveMrkValueFlatMap())
-                    .uid("AcctMrkValueWithPrice").name("AcctMrkValueWithPrice");
-                  /*  .keyBy(position -> position.getCusip())
+                    .uid("AcctPriceEnrichmentMap").name("AcctPriceEnrichmentMap")
+                    //.keyBy(position -> position.getCusip())
+                     .keyBy(
+                         new KeySelector<Position, Tuple3<String, String,String>>() {
+                     @Override
+                     public Tuple3<String, String,String> getKey(Position value) throws Exception {
+                        return Tuple3.of(value.getCusip(), value.getAccount(),value.getSubAccount());
+                      }})
                     .timeWindow(Time.minutes(1))
                     .apply(new PositionMarketValueWindowFunction())
-                    .name("AcctPositionMrkInOneMinWindow")
-                    .uid("AcctPositionMrkInOneMinWindow");*/
-
-                    // .timeWindowAll(TumblingProcessingTimeWindows.of(Time.minutes(1))
-                    //.timeWindowAll(Time.minutes(1))
-                    //apply(new PositionMrkValueWindow());
-
-      //  mkvByAccount.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "MarketValueByAct: {}"));
-
-        //pass the order ID and timestamp for latency matrix
-        DataStream<ComplianceResult>  results = mkvByAccount.map(new BuildTestResults());
-        //results.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "TestResults: {}"));
-
-
-        //join the positionBySymbol and Price
-        DataStream<PositionBySymbol> mkvBySymbol = priceStream
-                .connect(positionsBySymbolStream)
-                .flatMap(new CusipLeveMrkValueFlatMap())
-                .uid("CusipMrkValueWithPrice").name("CusipMrkValueWithPrice");
-               /* .keyBy(positionByCusip -> positionByCusip.getCusip())
-                .timeWindow(Time.minutes(1))
-                .apply(new PositionBySymbolMrkValueWindowFunction());*/
-      // mkvBySymbol.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "MarketValueBySymbol: {}"));
-
-
-        // sent to out topic for latency matrix
-        FlinkKafkaProducer010 flinkKafkaProducerCompResults = createTestResultProducer(OUT_TOPIC,KAFKA_ADDRESS);
-        results.addSink(flinkKafkaProducerCompResults);
+                    .name("AcctMrkValueInOneMinWindow")
+                    .uid("AcctMrkValueInOneMinWindow");
 
         // sent to topic
         FlinkKafkaProducer010 flinkKafkaProducer = createMrkValueAccountProducer(MV_BY_ACT_TOPIC,KAFKA_ADDRESS);
-        mkvByAccount.addSink(flinkKafkaProducer);
+        mkvByAccount.addSink(flinkKafkaProducer)
+                .name("PublishPosMarketValueByActToKafka")
+                .uid("PublishPosMarketValueByActToKafka");
+
+       mkvByAccount.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "MarketValueByAct: {}"));
+
+        //  pass the order ID and timestamp for latency matrix
+        //  DataStream<ComplianceResult>  results = mkvByAccount.map(new BuildTestResults());
+        //  results.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "TestResults: {}"));
+
+        // Create tbe Kafka Consumer for positions by symbol
+        FlinkKafkaConsumer010<PositionBySymbol> consumerPositionBySymbol = createConsumerPositionBySymbol(POSITIONS_BY_SYMBOL_TOPIC,KAFKA_ADDRESS,KAFKA_GROUP);
+        DataStream<PositionBySymbol> positionsBySymbolStream = env
+                .addSource(consumerPositionBySymbol).name("KafkaPostionsBySymReader")
+                .uid("KafkaPostionsBySymReader")
+                .keyBy(position -> position.getCusip());
+
+
+        //join the positionBySymbol and Price
+        DataStream<PositionBySymbol> mkvBySymbol = positionsBySymbolStream
+                .connect(priceStream)
+                .flatMap(new CusipLeveMrkValueFlatMap())
+                .uid("CusipPriceEnrichmentMap").name("CusipPriceEnrichmentMap")
+                .keyBy(positionByCusip -> positionByCusip.getCusip())
+                .timeWindow(Time.minutes(1))
+                .apply(new PositionBySymbolMrkValueWindowFunction())
+                .name("CusipMrkValueInOneMinWindow")
+                .uid("CusipMrkValueInOneMinWindow");
+
 
         // sent to topic
         FlinkKafkaProducer010 flinkKafkaProducerSym = createMrkValueSymbolProducer(MV_BY_SYMBOL_TOPIC,KAFKA_ADDRESS);
-        mkvBySymbol.addSink(flinkKafkaProducerSym);
+        mkvBySymbol.addSink(flinkKafkaProducerSym)
+                .name("PublishPosMarketValueBySymbolToKafka")
+                .uid("PublishPosMarketValueBySymbolToKafka");
+
+        mkvBySymbol.addSink(new LogSink<>(LOG, LogSink.LoggerEnum.INFO, "MarketValueBySymbol: {}"));
+
+
+        // sent to out topic for latency matrix
+      //  FlinkKafkaProducer010 flinkKafkaProducerCompResults = createTestResultProducer(OUT_TOPIC,KAFKA_ADDRESS);
+       // results.addSink(flinkKafkaProducerCompResults).name("complianceResult").uid("complianceResult");
+
+
 
         // execute the transformation pipeline
         env.execute("kafkaCalculateMarketValue");
